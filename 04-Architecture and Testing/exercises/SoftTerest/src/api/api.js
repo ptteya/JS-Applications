@@ -11,7 +11,6 @@ async function request(method, url, data) {
         options.body = JSON.stringify(data);
     }
 
-    //authorization 
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
         const token = user.accessToken;
@@ -21,9 +20,7 @@ async function request(method, url, data) {
     try {
         const response = await fetch(host + url, options);
 
-        //server error
         if (response.ok != true) {
-            //if token is invalid
             if (response.status == 403) {
                 localStorage.removeItem('user');
             }
@@ -31,7 +28,6 @@ async function request(method, url, data) {
             throw new Error(error.message);
         }
 
-        // on logout the server returns code 204 which means that the response is empty and response.json() will throw error
         if (response.status == 204) {
             return response;
         } else {
